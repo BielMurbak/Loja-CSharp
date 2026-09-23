@@ -1,0 +1,37 @@
+@MinhaApi_HostAddress = http://localhost:5147
+
+### Listar todos os produtos
+GET {{MinhaApi_HostAddress}}/produtos
+
+### Buscar produto por ID
+GET {{MinhaApi_HostAddress}}/produtos/1
+
+### Criar produto
+POST {{MinhaApi_HostAddress}}/produtos
+Content-Type: application/json
+
+{
+    "nome": "Notebook",
+    "preco": 3500
+}
+
+### Atualizar produto
+PUT {{MinhaApi_HostAddress}}/produtos/1
+Content-Type: application/json
+
+{
+    "nome": "Notebook Gamer",
+    "preco": 5000
+}
+
+### Deletar produto
+DELETE {{MinhaApi_HostAddress}}/produtos/1
+
+### Criar produto
+POST {{MinhaApi_HostAddress}}/produtos
+Content-Type: application/json
+
+{
+    "nome": "Notebook",
+    "preco": 3500
+}
