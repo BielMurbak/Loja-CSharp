@@ -14,22 +14,6 @@ public class ProdutoService
         _produtoRepository = produtoRepository;
     }
 
-
-    private static readonly List<Produto> _produtos = new List<Produto>
-        {
-            new Produto {
-                Id = 1,
-                Nome = "Teclado",
-                Preco = 150m
-            },
-
-            new Produto {
-                Id = 2,
-                Nome = "Mouse",
-                Preco = 50m
-            }
-        };
-
     public Produto Cadastrar(Produto produto)
     {
         produto.Id = _produtoRepository.Tamanho() + 1;
@@ -49,31 +33,14 @@ public class ProdutoService
 
     public Produto? Alterar(int id, Produto novoProduto)
     {
-        Produto? produtoExistente = _produtos.FirstOrDefault(produto => produto.Id == id);
-
-        if (produtoExistente == null)
-        {
-            return null;
-        }
-
-        produtoExistente.Nome = novoProduto.Nome;
-        produtoExistente.Preco = novoProduto.Preco;
-
-        return produtoExistente;
+        
+        return _produtoRepository.Alterar(id, novoProduto);
 
     }
 
     public bool Apagar(int id)
     {
-        Produto? produto = _produtos.FirstOrDefault(produto => produto.Id == id);
-
-        if (produto == null)
-        {
-            return false;
-        }
-
-        _produtos.Remove(produto);
-        return true;
+        return _produtoRepository.Apagar(id);
     }
 
 }

@@ -1,13 +1,14 @@
+using MinhaApi.Repositories;
 using MinhaApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-
+builder.Services.AddControllers();
 builder.Services.AddScoped<ProdutoService>();
+builder.Services.AddScoped<ProdutoRepository>();
 
 var app = builder.Build();
 
