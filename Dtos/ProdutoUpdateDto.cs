@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace MinhaApi.Dtos
+namespace MinhaApi.Dtos;
 
-{
+
     public class ProdutoUpdateDto
     {
         [Required]
@@ -11,4 +11,3 @@ namespace MinhaApi.Dtos
         [Range(0.01, double.MaxValue)]
         public decimal Preco {get; set;}
     }
-}

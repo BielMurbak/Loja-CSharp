@@ -7,16 +7,15 @@ namespace MinhaApi.Services;
 public class ProdutoService
 {   
 
-    private readonly ProdutoRepository _produtoRepository;
+    private readonly IProdutoRepository _produtoRepository;
 
-    public ProdutoService(ProdutoRepository produtoRepository)
+    public ProdutoService(IProdutoRepository produtoRepository)
     {
         _produtoRepository = produtoRepository;
     }
 
     public Produto Cadastrar(Produto produto)
     {
-        produto.Id = _produtoRepository.Tamanho() + 1;
         return _produtoRepository.Cadastrar(produto);
     } 
 

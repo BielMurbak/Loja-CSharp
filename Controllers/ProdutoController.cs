@@ -20,7 +20,8 @@ public class ProdutoController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        List<Produto> produtos = _produtoService.Listar();
+        
+        try{List<Produto> produtos = _produtoService.Listar();
         
         List<ProdutoResponseDto> resposta = produtos.Select(produto => new ProdutoResponseDto
         {
@@ -31,7 +32,22 @@ public class ProdutoController : ControllerBase
         }).ToList();
         
         return Ok(resposta);
-    }
+
+        }
+        catch (NullReferenceException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Ocorreu um erro ao listar");
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Ocorreu um erro interno no servidor.");
+
+        }
+    }   
 
     [HttpGet("{id}")]
 
@@ -55,17 +71,29 @@ public class ProdutoController : ControllerBase
             Preco = dto.Preco
 
         };
-
-        Produto resultado = _produtoService.Cadastrar(produto);
-
-        ProdutoResponseDto resposta = new ProdutoResponseDto()
+        try
         {
+            Produto resultado = _produtoService.Cadastrar(produto);
+            ProdutoResponseDto resposta = new ProdutoResponseDto()
+            {
             Id = resultado.Id,
             Nome = resultado.Nome,
             Preco = resultado.Preco
 
-        };
-        return Ok(resultado);
+            };
+            return Ok(resposta);
+        }
+        catch (NullReferenceException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Ocorreu um erro ao processar os dados do produto.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Ocorreu um erro interno no servidor.");
+        }
+        
     }   
 
     [HttpPut("{id}")]

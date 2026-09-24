@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using MinhaApi.Entities;
 
-namespace MinhaApi.Repositories
+namespace MinhaApi.Repositories;
 
-{
-    public class ProdutoRepository
+
+    public class ProdutoRepository : IProdutoRepository
     {
         
+        private static int id = 3;
         private static readonly List<Produto> _produtos = new List<Produto>
         {
             new Produto {
@@ -38,8 +39,11 @@ namespace MinhaApi.Repositories
         }
 
         public Produto Cadastrar(Produto produto)
-        {
+        {   
             _produtos.Add(produto);
+
+            produto.Id = id++;
+
             return produto;
         }
 
@@ -71,7 +75,7 @@ namespace MinhaApi.Repositories
             return true;
         }
     }
-}
+
 
 
 

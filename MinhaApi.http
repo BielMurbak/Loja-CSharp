@@ -4,7 +4,7 @@
 GET {{MinhaApi_HostAddress}}/produtos
 
 ### Buscar produto por ID
-GET {{MinhaApi_HostAddress}}/produtos/1
+GET {{MinhaApi_HostAddress}}/produtos/5
 
 ### Criar produto
 POST {{MinhaApi_HostAddress}}/produtos
@@ -25,13 +25,4 @@ Content-Type: application/json
 }
 
 ### Deletar produto
-DELETE {{MinhaApi_HostAddress}}/produtos/1
-
-### Criar produto
-POST {{MinhaApi_HostAddress}}/produtos
-Content-Type: application/json
-
-{
-    "nome": "Notebook",
-    "preco": 3500
-}
+DELETE {{MinhaApi_HostAddress}}/produtos/3
