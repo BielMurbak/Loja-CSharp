@@ -1,4 +1,3 @@
-using Microsoft.VisualBasic;
 using MinhaApi.Entities;
 using MinhaApi.Repositories;
 
@@ -14,32 +13,32 @@ public class ProdutoService
         _produtoRepository = produtoRepository;
     }
 
-    public Produto Cadastrar(Produto produto)
+    public async Task<Produto> Cadastrar(Produto produto)
     {
-        return _produtoRepository.Cadastrar(produto);
+        return await _produtoRepository.Cadastrar(produto);
     } 
 
-    public List<Produto> Listar(){
+    public async Task<List<Produto>> Listar(){
 
-        return _produtoRepository.Listar();
+        return await _produtoRepository.Listar();
 
     }
 
-    public Produto? BuscarPorId (int id)
+    public async Task<Produto?> BuscarPorId (int id)
     {
-        return _produtoRepository.BuscarPorId(id);
+        return await _produtoRepository.BuscarPorId(id);
     }
 
-    public Produto? Alterar(int id, Produto novoProduto)
+    public async Task<Produto?> Alterar(int id, Produto novoProduto)
     {
         
-        return _produtoRepository.Alterar(id, novoProduto);
+        return await _produtoRepository.Alterar(id, novoProduto);
 
     }
 
-    public bool Apagar(int id)
+    public async Task<bool> Apagar(int id)
     {
-        return _produtoRepository.Apagar(id);
+        return await _produtoRepository.Apagar(id);
     }
 
 }

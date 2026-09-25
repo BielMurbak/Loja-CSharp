@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using MinhaApi.Entities;
+using MinhaApi.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace MinhaApi.Repositories;
 
@@ -7,71 +8,62 @@ namespace MinhaApi.Repositories;
     public class ProdutoRepository : IProdutoRepository
     {
         
-        private static int id = 3;
-        private static readonly List<Produto> _produtos = new List<Produto>
-        {
-            new Produto {
-                Id = 1,
-                Nome = "Teclado",
-                Preco = 150m
-            },
+        private readonly AppDbContext _context;
 
-            new Produto {
-                Id = 2,
-                Nome = "Mouse",
-                Preco = 50m
-            }
-        };
-
-        public int Tamanho()
+        public ProdutoRepository(AppDbContext context)
         {
-            return _produtos.Count;
+            _context = context;
         }
 
-        public List<Produto> Listar()
+        public async Task<List<Produto>> Listar()
         {
-            return _produtos;
+            return await _context.Produtos.ToListAsync();
         }
 
-        public Produto? BuscarPorId(int id)
+        public async Task<Produto?> BuscarPorId(int id)
         {
-            return _produtos.FirstOrDefault(produto => produto.Id == id);
+            return await _context.Produtos.FirstOrDefaultAsync(produto => produto.Id == id);
         }
 
-        public Produto Cadastrar(Produto produto)
+        public async Task<Produto> Cadastrar(Produto produto)
         {   
-            _produtos.Add(produto);
+            _context.Produtos.Add(produto);
 
-            produto.Id = id++;
+            await _context.SaveChangesAsync();
 
             return produto;
         }
 
-        public Produto? Alterar(int id, Produto novoProduto)
+        public async Task<Produto?> Alterar(int id, Produto novoProduto)
         {
-            Produto? produtoExistente = _produtos.FirstOrDefault(produto => produto.Id == id);
+            Produto? produtoExistente = await _context.Produtos.FirstOrDefaultAsync(produto => produto.Id == id);
 
-        if (produtoExistente == null)
-        {
-            return null;
+            if (produtoExistente == null)
+            {
+                return null;
+            }
+
+            produtoExistente.Nome = novoProduto.Nome;
+            produtoExistente.Preco = novoProduto.Preco;
+
+            await _context.SaveChangesAsync();
+
+            return produtoExistente;
         }
 
-        produtoExistente.Nome = novoProduto.Nome;
-        produtoExistente.Preco = novoProduto.Preco;
-
-        return produtoExistente;
-        }
-
-        public bool Apagar(int id)
+        public async Task<bool> Apagar(int id)
         {
-            Produto? produto = _produtos.FirstOrDefault(produto => produto.Id == id);
+            Produto? produto = await _context.Produtos.FirstOrDefaultAsync(produto => produto.Id == id);
 
             if (produto == null)
             {
                 return false;
             }
 
-            _produtos.Remove(produto);
+            _context.Produtos.Remove(produto);
+
+            await _context.SaveChangesAsync();
+
             return true;
         }
     }

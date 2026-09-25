@@ -9,7 +9,6 @@ namespace MinhaApi.Controllers;
 [Route("produtos")]
 public class ProdutoController : ControllerBase
 {
-
     private readonly ProdutoService _produtoService;
 
     public ProdutoController(ProdutoService produtoService)
@@ -18,11 +17,10 @@ public class ProdutoController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
-        
-        try{List<Produto> produtos = _produtoService.Listar();
-        
+        List<Produto> produtos = await _produtoService.Listar();
+
         List<ProdutoResponseDto> resposta = produtos.Select(produto => new ProdutoResponseDto
         {
             Id = produto.Id,
@@ -30,40 +28,25 @@ public class ProdutoController : ControllerBase
             Preco = produto.Preco
 
         }).ToList();
-        
+
         return Ok(resposta);
-
-        }
-        catch (NullReferenceException ex)
-        {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Ocorreu um erro ao listar");
-
-
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Ocorreu um erro interno no servidor.");
-
-        }
-    }   
+    }
 
     [HttpGet("{id}")]
-
-    public IActionResult GetId(int id)
+    public async Task<IActionResult> GetId(int id)
     {
-        Produto? resultado = _produtoService.BuscarPorId(id);
+        Produto? resultado = await _produtoService.BuscarPorId(id);
 
         if (resultado == null)
         {
-            return NotFound("Produto nao encontrado");
+            return NotFound("Produto não encontrado.");
         }
+
         return Ok(resultado);
     }
 
     [HttpPost]
-    public IActionResult Post(ProdutoCreateDto dto)
+    public async Task<IActionResult> Post(ProdutoCreateDto dto)
     {
         Produto produto = new Produto()
         {
@@ -71,33 +54,22 @@ public class ProdutoController : ControllerBase
             Preco = dto.Preco
 
         };
-        try
+
+        Produto resultado = await _produtoService.Cadastrar(produto);
+
+        ProdutoResponseDto resposta = new ProdutoResponseDto()
         {
-            Produto resultado = _produtoService.Cadastrar(produto);
-            ProdutoResponseDto resposta = new ProdutoResponseDto()
-            {
             Id = resultado.Id,
             Nome = resultado.Nome,
             Preco = resultado.Preco
 
-            };
-            return Ok(resposta);
-        }
-        catch (NullReferenceException ex)
-        {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Ocorreu um erro ao processar os dados do produto.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Ocorreu um erro interno no servidor.");
-        }
-        
-    }   
+        };
+
+        return Ok(resposta);
+    }
 
     [HttpPut("{id}")]
-    public IActionResult Put(int id, ProdutoUpdateDto dto)
+    public async Task<IActionResult> Put(int id, ProdutoUpdateDto dto)
     {
         Produto produto = new Produto()
         {
@@ -105,7 +77,7 @@ public class ProdutoController : ControllerBase
             Preco = dto.Preco
         };
 
-        Produto? resultado = _produtoService.Alterar(id, produto);
+        Produto? resultado = await _produtoService.Alterar(id, produto);
 
         if (resultado == null)
         {
@@ -119,20 +91,18 @@ public class ProdutoController : ControllerBase
         };
 
         return Ok(resposta);
-
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        bool resultado = _produtoService.Apagar(id);
+        bool resultado = await _produtoService.Apagar(id);
 
-        if(!resultado)
+        if (!resultado)
         {
             return NotFound("Produto não encontrado.");
         }
 
         return NoContent();
-
     }
 }
